@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #fbf8f1;
+  --color-paper-2: #f3ecde;
+  --color-ink: #1b1713;
+  --color-ink-soft: #6d6456;
+  --color-line: #e7ddc9;
+  --color-accent: #1f7a4d;
+  --color-accent-deep: #134f33;
+  --color-accent-soft: #e6f0e8;
+  --color-clay: #c8623c;
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-hanken);
+
+  --radius: 0.9rem;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Warm atmosphere — soft colored light, not noise. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.45;
+  background-image: radial-gradient(
+      1100px 560px at 88% -12%,
+      rgba(31, 122, 77, 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      820px 460px at -8% 112%,
+      rgba(200, 98, 60, 0.06),
+      transparent 60%
+    );
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-paper);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+.float {
+  animation: float 4.5s ease-in-out infinite;
+}
+
+.float-slow {
+  animation: float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .float,
+  .float-slow {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
