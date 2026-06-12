@@ -18,7 +18,8 @@ API token is never exposed to client-side JavaScript.
 - **Campaign detail** — full description, perks, and a donation panel
 - **Auth** — register and sign in; the session lives in an httpOnly cookie
 - **Start a campaign** — authenticated users can publish a campaign
-- **Donate** — create a transaction and hand off to the Midtrans payment page
+- **Donate** — create a transaction and hand off to the Midtrans payment page,
+  or, when the API has payments in demo mode, a "contact support" modal
 - **My donations** — a history of the campaigns you've backed and their status
 
 ## Tech stack
@@ -38,6 +39,11 @@ A few decisions worth calling out:
   every API response, and the TypeScript types are inferred from those schemas.
 - **Reusable building blocks.** Forms share `Field`, `SubmitButton`, and
   `FormMessage`; the rest of the UI is composed from small, focused components.
+- **Config-driven payment gating.** The campaign page asks the API
+  (`GET /config`) whether live payments are on. If they're off, the donate
+  button opens a "contact support" modal instead of starting a checkout — the
+  backend stays the single source of truth, and the same flag blocks the
+  transaction server-side too.
 
 ```
 src/

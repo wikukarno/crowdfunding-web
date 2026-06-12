@@ -1,10 +1,12 @@
 import { z } from "zod";
 import {
+  appConfigSchema,
   campaignDetailSchema,
   campaignSchema,
   transactionSchema,
   userSchema,
   userTransactionSchema,
+  type AppConfig,
   type Campaign,
   type CampaignDetail,
   type Transaction,
@@ -72,6 +74,10 @@ async function apiRequest<T extends z.ZodTypeAny>(
 }
 
 export const api = {
+  getConfig(): Promise<AppConfig> {
+    return apiRequest("/config", { schema: appConfigSchema });
+  },
+
   listCampaigns(userId?: string): Promise<Campaign[]> {
     return apiRequest(`/campaigns${userId ? `?user_id=${userId}` : ""}`, {
       schema: z.array(campaignSchema),

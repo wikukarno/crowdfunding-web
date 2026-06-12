@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { api, ApiError } from "@/lib/api";
-import type { CampaignDetail } from "@/lib/schemas";
+import type { AppConfig, CampaignDetail } from "@/lib/schemas";
 import { formatCurrency, progressPercent } from "@/lib/format";
 import { isAuthenticated } from "@/lib/session";
 import { Progress } from "@/components/progress";
@@ -24,7 +24,17 @@ export default async function CampaignPage({
     throw e;
   }
 
-  const signedIn = await isAuthenticated();
+  // If the config call fails for any reason, fall back to demo mode so we never
+  // send a backer into a payment flow that the backend has switched off.
+  const demoConfig: AppConfig = {
+    payments_enabled: false,
+    support_email: "hi@wikukarno.dev",
+  };
+  const [signedIn, config] = await Promise.all([
+    isAuthenticated(),
+    api.getConfig().catch(() => demoConfig),
+  ]);
+
   const pct = progressPercent(campaign.current_amount, campaign.goal_amount);
   const perks = (campaign.perks ?? []).filter(Boolean);
 
@@ -118,7 +128,12 @@ export default async function CampaignPage({
               </div>
             </div>
 
-            <DonateForm campaignId={campaign.id} signedIn={signedIn} />
+            <DonateForm
+              campaignId={campaign.id}
+              signedIn={signedIn}
+              paymentsEnabled={config.payments_enabled}
+              supportEmail={config.support_email}
+            />
           </div>
         </aside>
       </div>

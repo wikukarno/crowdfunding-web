@@ -13,6 +13,12 @@ const variants: Record<Variant, string> = {
   ghost: "border border-line bg-transparent text-ink hover:border-ink/40",
 };
 
+/** Compose the button classes for elements that can't use <Button>/<ButtonLink>
+ * (e.g. a native mailto anchor). */
+export function buttonClasses(variant: Variant = "primary", className = "") {
+  return `${base} ${variants[variant]} ${className}`;
+}
+
 export function Button({
   variant = "primary",
   className = "",

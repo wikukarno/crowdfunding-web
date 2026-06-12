@@ -59,11 +59,18 @@ export const userTransactionSchema = z.object({
   campaign: z.object({ name: z.string(), image_url: z.string() }),
 });
 
+/** Public runtime config the API hands to the web app. */
+export const appConfigSchema = z.object({
+  payments_enabled: z.boolean(),
+  support_email: z.string(),
+});
+
 export type User = z.infer<typeof userSchema>;
 export type Campaign = z.infer<typeof campaignSchema>;
 export type CampaignDetail = z.infer<typeof campaignDetailSchema>;
 export type Transaction = z.infer<typeof transactionSchema>;
 export type UserTransaction = z.infer<typeof userTransactionSchema>;
+export type AppConfig = z.infer<typeof appConfigSchema>;
 
 /* ── Form input validation ────────────────────────────────────────────── */
 
