@@ -14,7 +14,12 @@ import {
   type UserTransaction,
 } from "./schemas";
 
-const BASE_URL = process.env.API_URL ?? "http://localhost:8081/api/v1";
+// Trim any trailing slash so a value like ".../api/v1/" can't produce a
+// double-slashed "//users" path (which the API rejects with a 404).
+const BASE_URL = (process.env.API_URL ?? "http://localhost:8081/api/v1").replace(
+  /\/+$/,
+  "",
+);
 
 export class ApiError extends Error {
   status: number;
